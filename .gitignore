@@ -3,3 +3,10 @@
 
 # Ignore Gradle build output directory
 build
+
+# Ignore IDE specific setting files
+.vscode
+nbproject
+
+# Ignore builds
+app/bin
