@@ -1,18 +1,24 @@
 package alquerque;
 
+import alquerque.utils.Displayable;
 import lombok.Getter;
 import lombok.Setter;
 
+@Getter
 public class Square {
-    @Getter
+
+    public static final String WHITE_PAWN = Displayable.WHITE + Displayable.FILLED_CIRCLE;
+    public static final String WHITE_QUEEN = Displayable.GREEN + Displayable.FILLED_CIRCLE;
+    public static final String BLACK_PAWN = Displayable.BROWN + Displayable.FILLED_CIRCLE;
+    public static final String BLACK_QUEEN = Displayable.RED + Displayable.FILLED_CIRCLE;
+    public static final String PLAYABLE = Displayable.BROWN_BACKGROUND;
+    public static final String NON_PLAYABLE = Displayable.WHITE_BACKGROUND + Displayable.SPACE;
+
     private boolean isPlayable;
-    @Getter
     @Setter
     private boolean isOccupied;
-    @Getter
     @Setter
     private boolean isWhite;
-    @Getter
     @Setter
     private boolean isQueen;
 
@@ -21,5 +27,12 @@ public class Square {
         this.isOccupied = isOccupied;
         this.isWhite = isWhite;
         this.isQueen = false;
+    }
+
+    @Override
+    public String toString() {
+        return (isPlayable ? PLAYABLE : NON_PLAYABLE)
+                + (isQueen ? (isWhite ? WHITE_PAWN : BLACK_PAWN) : (isWhite ? WHITE_QUEEN : BLACK_QUEEN))
+                + Displayable.RESET;
     }
 }
