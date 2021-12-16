@@ -17,5 +17,13 @@ public class Board {
         this.player2 = player2;
         this.currentPlayer = player1;
     }
+
+    public Square squareAt(int x, int y) {
+        return this.squares[x][y];
+    }
+
+    public Square squareAt(Position pos) {
+        return this.squareAt(pos.x(), pos.y());
+    }
 }
 
