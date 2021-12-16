@@ -16,7 +16,7 @@ public class Square {
     @Setter
     private boolean isQueen;
 
-    public Square(boolean isPlayable,boolean isOccupied,boolean isWhite) {
+    public Square(boolean isPlayable, boolean isOccupied, boolean isWhite) {
         this.isPlayable = isPlayable;
         this.isOccupied = isOccupied;
         this.isWhite = isWhite;
