@@ -14,25 +14,25 @@ public class Square {
     public static final String PLAYABLE = Displayable.BROWN_BACKGROUND;
     public static final String NON_PLAYABLE = Displayable.WHITE_BACKGROUND + Displayable.SPACE;
 
-    private boolean isPlayable;
+    private boolean playable;
     @Setter
-    private boolean isOccupied;
+    private boolean occupied;
     @Setter
-    private boolean isWhite;
+    private boolean white;
     @Setter
-    private boolean isQueen;
+    private boolean queen;
 
     public Square(boolean isPlayable, boolean isOccupied, boolean isWhite) {
-        this.isPlayable = isPlayable;
-        this.isOccupied = isOccupied;
-        this.isWhite = isWhite;
-        this.isQueen = false;
+        this.playable = isPlayable;
+        this.occupied = isOccupied;
+        this.white = isWhite;
+        this.queen = false;
     }
 
     @Override
     public String toString() {
-        return (isPlayable ? PLAYABLE : NON_PLAYABLE)
-                + (isQueen ? (isWhite ? WHITE_PAWN : BLACK_PAWN) : (isWhite ? WHITE_QUEEN : BLACK_QUEEN))
-                + Displayable.RESET;
+        return !playable ? NON_PLAYABLE
+                : PLAYABLE + (queen ? (white ? WHITE_PAWN : BLACK_PAWN) : (white ? WHITE_QUEEN : BLACK_QUEEN))
+                        + Displayable.RESET;
     }
 }

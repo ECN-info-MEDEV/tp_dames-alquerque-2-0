@@ -6,5 +6,5 @@ import lombok.Getter;
 @AllArgsConstructor
 public class Player {
     @Getter
-    private boolean isWhite;
+    private boolean white;
 }

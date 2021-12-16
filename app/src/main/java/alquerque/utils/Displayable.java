@@ -18,7 +18,7 @@ public class Displayable {
     public static final String BROWN_BACKGROUND = backgroundColor(176, 92, 19);
 
     // symbols
-    public static final String FILLED_CIRCLE = "⬤ ";
+    public static final String FILLED_CIRCLE = "\u2b24\u200a"; // ⬤ + hair space (to fix display bug in some terminals)
     public static final String SPACE = "  ";
 
     // background color generator
