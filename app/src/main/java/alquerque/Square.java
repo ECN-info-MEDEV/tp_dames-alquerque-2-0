@@ -12,7 +12,7 @@ public class Square {
     public static final String BLACK_PAWN = Displayable.BROWN + Displayable.FILLED_CIRCLE;
     public static final String BLACK_QUEEN = Displayable.RED + Displayable.FILLED_CIRCLE;
     public static final String PLAYABLE = Displayable.BROWN_BACKGROUND;
-    public static final String NON_PLAYABLE = Displayable.WHITE_BACKGROUND + Displayable.SPACE;
+    public static final String NON_PLAYABLE = Displayable.WHITE_BACKGROUND;
 
     private boolean playable;
     @Setter
@@ -31,8 +31,12 @@ public class Square {
 
     @Override
     public String toString() {
-        return !playable ? NON_PLAYABLE
-                : PLAYABLE + (queen ? (white ? WHITE_PAWN : BLACK_PAWN) : (white ? WHITE_QUEEN : BLACK_QUEEN))
-                        + Displayable.RESET;
+        String representation = playable ? PLAYABLE : NON_PLAYABLE;
+        if (occupied && playable) {
+            representation += queen ? (white ? WHITE_QUEEN : BLACK_QUEEN) : (white ? WHITE_PAWN : BLACK_PAWN);
+        } else {
+            representation += Displayable.SPACE;
+        }
+        return representation + Displayable.RESET;
     }
 }

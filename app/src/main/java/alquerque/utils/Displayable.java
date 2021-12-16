@@ -14,7 +14,7 @@ public class Displayable {
     public static final String GREEN = color(109, 212, 0);
     public static final String BROWN = color(71, 35, 5);
     public static final String RED = color(235, 0, 27);
-    public static final String WHITE_BACKGROUND = backgroundColor(237, 210, 111);
+    public static final String WHITE_BACKGROUND = backgroundColor(219, 202, 125);
     public static final String BROWN_BACKGROUND = backgroundColor(176, 92, 19);
 
     // symbols
