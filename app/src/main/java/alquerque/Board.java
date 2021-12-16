@@ -1,8 +1,13 @@
 package alquerque;
 
+import lombok.Getter;
+
 public class Board {
-    Player player1;
-    Player player2;
-    Square[][] squares;
+    @Getter
+    private Player player1;
+    @Getter
+    private Player player2;
+    @Getter
+    private Square[][] squares;
 }
 
