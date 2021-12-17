@@ -6,9 +6,17 @@ package alquerque;
 public class App {
 
     public static void main(String[] args) {
-        // play the game here
+
+        // create a new board
         Board board = new Board(null, null);
+
+        // set to queens for display testing
+        board.getSquares()[7][2].setQueen(true);
+        board.getSquares()[1][2].setQueen(true);
+
+        // display the board
         board.display();
+
     }
 
 }

@@ -1,5 +1,6 @@
 package alquerque;
 
+import alquerque.utils.Displayable;
 import lombok.Getter;
 
 public class Board {
@@ -20,6 +21,9 @@ public class Board {
         init();
     }
 
+    /**
+     * Init the board with pawns at their initial positions (init squares)
+     */
     public void init() {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
@@ -36,7 +40,11 @@ public class Board {
         return this.squareAt(pos.x(), pos.y());
     }
 
+    /**
+     * Clear the console and display the board
+     */
     public void display() {
+        Displayable.clearConsole();
         System.out.println("  0 1 2 3 4 5 6 7 8 9 ");
         for (int i = 0; i < 10; i++) {
             System.out.print(Character.toString('A' + i) + " ");
