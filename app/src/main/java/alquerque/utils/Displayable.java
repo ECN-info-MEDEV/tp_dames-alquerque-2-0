@@ -24,6 +24,7 @@ public class Displayable {
     // symbols
     public static final String FILLED_CIRCLE = "\u2b24\u200a"; // ⬤ + hair space (to fix display bug in some terminals)
     public static final String FILLED_ROUNDED_O = "\u24ff\u200a"; // ⓿ + hair space
+    public static final String FILLED_ROUNDED_D = "🅓\u200a"; // 🅓 + hair space
     public static final String PAWN = "⛂ ";
     public static final String BOLD_PAWN = "\033[1m⛂ ";
     public static final String QUEEN = "⛃ ";

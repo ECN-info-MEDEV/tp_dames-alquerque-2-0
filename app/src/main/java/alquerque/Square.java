@@ -8,9 +8,9 @@ import lombok.Setter;
 public class Square {
 
     public static final String WHITE_PAWN = Displayable.YELLOW + Displayable.FILLED_CIRCLE;
-    public static final String WHITE_QUEEN = Displayable.YELLOW2 + Displayable.FILLED_ROUNDED_O;
+    public static final String WHITE_QUEEN = Displayable.YELLOW2 + Displayable.FILLED_ROUNDED_D;
     public static final String BLACK_PAWN = Displayable.BROWN + Displayable.FILLED_CIRCLE;
-    public static final String BLACK_QUEEN = Displayable.BROWN + Displayable.FILLED_ROUNDED_O;
+    public static final String BLACK_QUEEN = Displayable.BROWN + Displayable.FILLED_ROUNDED_D;
     public static final String PLAYABLE = Displayable.BROWN_BACKGROUND;
     public static final String NON_PLAYABLE = Displayable.WHITE_BACKGROUND;
 
