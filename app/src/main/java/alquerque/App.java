@@ -8,7 +8,7 @@ public class App {
     public static void main(String[] args) {
 
         // create a new board
-        Board board = new Board(null, null);
+        Board board = new Board(new Player(false), new Player(true));
 
         // set to queens for display testing
         board.getSquares()[7][2].setQueen(true);
