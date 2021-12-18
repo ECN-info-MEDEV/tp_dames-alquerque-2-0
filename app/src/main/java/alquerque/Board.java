@@ -46,14 +46,14 @@ public class Board {
     public void display() {
         Displayable.clearConsole();
 
-        boolean White = currentPlayer.isWhite();
-        System.out.println(White ? "  0 1 2 3 4 5 6 7 8 9 " : "  9 8 7 6 5 4 3 2 1 0 ");
+        boolean white = currentPlayer.isWhite();
+        System.out.println(white ? "  0 1 2 3 4 5 6 7 8 9 " : "  9 8 7 6 5 4 3 2 1 0 ");
 
         for (int i = 0; i < 10; i++) {
-            int xi = White ? i : 9 - i;
+            int xi = white ? i : 9 - i;
             System.out.print(Character.toString('A' + xi) + " ");
             for (int j = 0; j < 10; j++) {
-                System.out.print(squares[xi][White ? j : 9 - j]);
+                System.out.print(squares[xi][white ? j : 9 - j]);
             }
             System.out.println("");
         }
