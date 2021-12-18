@@ -1,6 +1,10 @@
 package alquerque;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
+
+import alquerque.utils.Displayable;
 
 public class SquareTest {
     @Test
@@ -19,7 +23,30 @@ public class SquareTest {
         System.out.print(whiteQueen);
         System.out.print(blackQueen);
 
-        // Add assertions
+        assertEquals(
+                Displayable.WHITE_BACKGROUND + Displayable.SPACE
+                        + Displayable.RESET,
+                nonPlayable.toString());
+
+        assertEquals(
+                Displayable.BROWN_BACKGROUND + Displayable.YELLOW
+                        + Displayable.FILLED_CIRCLE + Displayable.RESET,
+                whitePawn.toString());
+
+        assertEquals(
+                Displayable.BROWN_BACKGROUND + Displayable.BROWN
+                        + Displayable.FILLED_CIRCLE + Displayable.RESET,
+                blackPawn.toString());
+
+        assertEquals(
+                Displayable.BROWN_BACKGROUND + Displayable.YELLOW2
+                        + Displayable.FILLED_ROUNDED_D + Displayable.RESET,
+                whiteQueen.toString());
+
+        assertEquals(
+                Displayable.BROWN_BACKGROUND + Displayable.BROWN
+                        + Displayable.FILLED_ROUNDED_D + Displayable.RESET,
+                blackQueen.toString());
 
     }
 }
