@@ -162,8 +162,8 @@ public class Board {
             System.out.println("À toi de jouer joueur " + (currentPlayer.isWhite() ? "blanc" : "noir") + " !");
             BufferedReader obj = new BufferedReader(new InputStreamReader(System.in));
             try {
-                Optional<Position> start = Optional.empty();
-                Optional<Position> end = Optional.empty();
+                Optional<Position> start = Optional.of(new Position(0, 0));
+                Optional<Position> end = Optional.of(new Position(10, 10));
                 while (!move(new Move(start.get(), end.get()), true)) {
                     start = Optional.empty();
                     while (start.isEmpty()) {
@@ -200,7 +200,7 @@ public class Board {
                     }
                     int choixInt = Integer.parseInt(choixString);
                     if (choixInt < endList.size()) {
-                        boolean temp = move(endList.get(choixInt), false);
+                        move(endList.get(choixInt), false);
                     }
 
                 }
@@ -216,8 +216,8 @@ public class Board {
 
     }
 
-    private Optional<Position> syntaxCorrect(String pos){
-        if
+    private Optional<Position> syntaxCorrect(String pos) {
+        // TODO vérifier la syntaxe
     }
 
     public static boolean isNumeric(String strNum) {
@@ -225,7 +225,7 @@ public class Board {
             return false;
         }
         try {
-            double d = Double.parseDouble(strNum);
+            double d = Integer.parseInt(strNum);
         } catch (NumberFormatException nfe) {
             return false;
         }
