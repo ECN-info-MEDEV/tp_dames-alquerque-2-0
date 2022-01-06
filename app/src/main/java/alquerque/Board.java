@@ -9,7 +9,6 @@ import java.util.Optional;
 
 import alquerque.utils.Displayable;
 import lombok.Getter;
-import lombok.var;
 
 public class Board {
     @Getter
@@ -94,9 +93,9 @@ public class Board {
         return
         // Direct move: if we are moving to a forward diagonal which is not occupied
         end.equals(fr) && !squareAt(fr).isOccupied() || end.equals(fl) && !squareAt(fl).isOccupied()
-        // Jump: if we are moving to a jump which is occupied, and that the square we
+        // Jump: if we are jumping to a square which is occupied, and that the square we
         // are jumping
-        // has an enemy's piece.
+        // over has an enemy's piece.
                 || end.equals(fr2) && squareAt(fr).isOccupied() && squareAt(fr).isWhite() != isWhite
                         && !squareAt(fr2).isOccupied()
                 || end.equals(fl2) && squareAt(fl).isOccupied() && squareAt(fl).isWhite() != isWhite
@@ -163,8 +162,8 @@ public class Board {
             System.out.println("À toi de jouer joueur " + (currentPlayer.isWhite() ? "blanc" : "noir") + " !");
             BufferedReader obj = new BufferedReader(new InputStreamReader(System.in));
             try {
-                Optional<Position> start;
-                Optional<Position> end;
+                Optional<Position> start = Optional.empty();
+                Optional<Position> end = Optional.empty();
                 while (!move(new Move(start.get(), end.get()), true)) {
                     start = Optional.empty();
                     while (start.isEmpty()) {
@@ -201,7 +200,7 @@ public class Board {
                     }
                     int choixInt = Integer.parseInt(choixString);
                     if (choixInt < endList.size()) {
-                        boolean temp = move(new Move(endList.get(choixInt)), false);
+                        boolean temp = move(endList.get(choixInt), false);
                     }
 
                 }
@@ -230,6 +229,23 @@ public class Board {
         } catch (NumberFormatException nfe) {
             return false;
         }
+        return true;
+    }
+
+    /**
+     * Move a piece.
+     * 
+     * @return If this move was successful.
+     */
+    public boolean move(Move m, boolean firstMove) {
+        if (firstMove ? !isPossibleUnmoved(m) : !isPossibleMoved(m.start()).isEmpty()) {
+            return false;
+        }
+        var start = m.start();
+        var end = m.end();
+        squares[end.x()][end.y()] = squares[start.x()][start.y()];
+        squares[start.x()][start.y()] = new Square(true, false, false);
+        /* TODO: Eat the piece in between if we jumped. */
         return true;
     }
 }

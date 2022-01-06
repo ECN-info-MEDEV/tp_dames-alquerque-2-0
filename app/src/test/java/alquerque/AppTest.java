@@ -3,6 +3,31 @@
  */
 package alquerque;
 
-class AppTest {
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
 
+class AppTest {
+    @Test
+    void testMoveValidation() {
+        var white = new Player(true);
+        var board = new Board(white, new Player(false));
+
+        Square whitePawn = new Square(true, true, true);
+        Square blackPawn = new Square(true, true, false);
+        Square whiteQueen = new Square(true, true, true);
+        whiteQueen.setQueen(true);
+        Square blackQueen = new Square(true, true, false);
+        blackQueen.setQueen(true);
+
+
+        board.getSquares()[5][5] = blackPawn;
+
+        var start = new Position(6, 6);
+        var jump = new Position(4, 4);
+        var side = new Position(5, 7);
+        assertTrue(board.isPossibleUnmoved(new Move(start, side)));
+        assertTrue(board.isPossibleUnmoved(new Move(start, jump)));
+        // TODO: Wrong implementation of isPossibleMoved. Should return jumped to squares.
+        // assertTrue(board.isPossibleMoved(start).contains(new Move(start, jump)));
+    }
 }
