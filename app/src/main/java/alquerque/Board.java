@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import alquerque.utils.Displayable;
 import lombok.Getter;
-import lombok.var;
 
 public class Board {
     @Getter
@@ -89,8 +88,8 @@ public class Board {
         return
         // Direct move: if we are moving to a forward diagonal which is not occupied
         end.equals(fr) && !squareAt(fr).isOccupied() || end.equals(fl) && !squareAt(fl).isOccupied()
-        // Jump: if we are moving to a jump which is occupied, and that the square we are jumping
-        // has an enemy's piece.
+        // Jump: if we are jumping to a square which is occupied, and that the square we are jumping
+        // over has an enemy's piece.
                 || end.equals(fr2) && squareAt(fr).isOccupied() && squareAt(fr).isWhite() != isWhite
                         && !squareAt(fr2).isOccupied()
                 || end.equals(fl2) && squareAt(fl).isOccupied() && squareAt(fl).isWhite() != isWhite
@@ -149,5 +148,22 @@ public class Board {
 
         return List.of(fr, fl, fr2, fl2, br2, bl2).stream().map(end -> new Move(start, end))
                 .anyMatch(this::isPossibleUnmoved);
+    }
+
+    /**
+     * Move a piece.
+     * 
+     * @return If this move was successful.
+     */
+    public boolean move(Move m, boolean firstMove) {
+        if (firstMove ? !isPossibleUnmoved(m) : !isPossibleMoved(m.start()).isEmpty()) {
+            return false;
+        }
+        var start = m.start();
+        var end = m.end();
+        squares[end.x()][end.y()] = squares[start.x()][start.y()];
+        squares[start.x()][start.y()] = new Square(true, false, false);
+        /* TODO: Eat the piece in between if we jumped. */
+        return true;
     }
 }
