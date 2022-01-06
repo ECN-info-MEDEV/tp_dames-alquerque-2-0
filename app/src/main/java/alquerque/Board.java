@@ -116,4 +116,38 @@ public class Board {
         return possiblePos;
     }
 
+    public boolean moveExist() {
+        var isWhite = currentPlayer.isWhite();
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                // Only check the pieces that we have.
+                if (squareAt(i, j).isOccupied() && squareAt(i, j).isWhite() == isWhite
+                        && moveExist(new Position(i, j))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean moveExist(Position start) {
+        var x = start.x();
+        var y = start.y();
+        // "forward" is in the -x direction for white, and the +x direction for black.
+        var isWhite = currentPlayer.isWhite();
+        var dx = isWhite ? -1 : 1;
+
+        // forward-right and forward-left squares.
+        var fr = new Position(x + dx, y + 1);
+        var fl = new Position(x + dx, y - 1);
+
+        // Indirect diagonal squares.
+        var fr2 = new Position(x + 2 * dx, y + 2);
+        var fl2 = new Position(x + 2 * dx, y - 2);
+        var br2 = new Position(x - 2 * dx, y + 2);
+        var bl2 = new Position(x - 2 * dx, y - 2);
+
+        return List.of(fr, fl, fr2, fl2, br2, bl2).stream().map(end -> new Move(start, end))
+                .anyMatch(this::isPossibleUnmoved);
+    }
 }
