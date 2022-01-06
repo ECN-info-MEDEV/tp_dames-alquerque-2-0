@@ -1,7 +1,11 @@
 package alquerque;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import alquerque.utils.Displayable;
 import lombok.Getter;
+import lombok.var;
 
 public class Board {
     @Getter
@@ -58,4 +62,23 @@ public class Board {
             System.out.println("");
         }
     }
+
+    public boolean isPossibleUnmoved(Move movement) {
+        return true;
+    }
+
+    public List<Move> isPossibleMoved(Position start) {
+        List<Move> possiblePos = new ArrayList<>();
+        List<Position> positions = List.of(new Position(start.x() - 1, start.y() - 1),
+                new Position(start.x() - 1, start.y() + 1), new Position(start.x() + 1, start.y() - 1),
+                new Position(start.x() + 1, start.y() + 1));
+        for (Position pos : positions) {
+            Square theCase = this.squareAt(pos);
+            if (theCase.isOccupied() && this.currentPlayer.isWhite() ? !theCase.isWhite() : theCase.isWhite()) {
+                possiblePos.add(new Move(start, pos));
+            }
+        }
+        return possiblePos;
+    }
+
 }
