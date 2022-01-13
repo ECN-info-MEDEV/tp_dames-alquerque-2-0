@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -72,6 +73,9 @@ public class Board {
         var end = movement.end();
         var x = start.x();
         var y = start.y();
+        if (!this.squareAt(start).isOccupied() || this.squareAt(start).isWhite() != this.currentPlayer.isWhite()) {
+            return false;
+        }
         // "forward" is in the -x direction for white, and the +x direction for black.
         var isWhite = currentPlayer.isWhite();
         var dx = isWhite ? -1 : 1;
@@ -108,6 +112,11 @@ public class Board {
     }
 
     public List<Move> isPossibleMoved(Position start) {
+
+        if (!this.squareAt(start).isOccupied() || this.squareAt(start).isWhite() != this.currentPlayer.isWhite()) {
+            return List.of();
+        }
+
         List<Move> possiblePos = new ArrayList<>();
         List<Position> positions = List.of(new Position(start.x() - 2, start.y() - 2),
                 new Position(start.x() - 2, start.y() + 2),
