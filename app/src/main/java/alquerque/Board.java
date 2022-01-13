@@ -109,15 +109,20 @@ public class Board {
 
     public List<Move> isPossibleMoved(Position start) {
         List<Move> possiblePos = new ArrayList<>();
-        List<Position> positions = List.of(new Position(start.x() - 1, start.y() - 1),
-                new Position(start.x() - 1, start.y() + 1),
-                new Position(start.x() + 1, start.y() - 1),
-                new Position(start.x() + 1, start.y() + 1));
+        List<Position> positions = List.of(new Position(start.x() - 2, start.y() - 2),
+                new Position(start.x() - 2, start.y() + 2),
+                new Position(start.x() + 2, start.y() - 2),
+                new Position(start.x() + 2, start.y() + 2));
         for (Position pos : positions) {
-            Square theCase = this.squareAt(pos);
-            if (inRange(pos) && theCase.isOccupied() && this.currentPlayer.isWhite() != theCase.isWhite()) {
-                possiblePos.add(new Move(start, pos));
+            if (inRange(pos)) { // on vérifie que la position est sur le plateau
+                Square end = this.squareAt(pos);
+                Square theCase = this.squares[(start.x() + pos.x()) / 2][(start.y() + pos.y()) / 2];
+                if (theCase.isOccupied() && this.currentPlayer.isWhite() != theCase.isWhite() && !end.isOccupied()) {
+                    // on vérifie que la case est occupée,
+                    possiblePos.add(new Move(start, pos));
+                }
             }
+
         }
         return possiblePos;
     }
@@ -172,7 +177,8 @@ public class Board {
             try {
                 Optional<Position> start = Optional.of(new Position(0, 0));
                 Optional<Position> end = Optional.of(new Position(10, 10));
-                while (!move(new Move(start.get(), end.get()), true)) {
+                Optional<Boolean> correct = move(new Move(start.get(), end.get()), true);
+                while (correct.isEmpty()) {
                     start = Optional.empty();
                     while (start.isEmpty()) {
                         System.out.print("Rentrez la position de départ : ");
@@ -187,30 +193,33 @@ public class Board {
                         end = syntaxCorrect(endString);
                     }
                     System.out.println("");
+                    correct = move(new Move(start.get(), end.get()), true);
                 }
 
                 // potentiel 2ème tour du même joueur
 
-                start = end;
-                List<Move> endList = isPossibleMoved(start.get());
-                if (!endList.isEmpty()) {
-                    System.out.println("Voici les mouvements encore possibles :");
-                    for (int i = 0; i < endList.size(); i++) {
-                        System.out.println(endList.get(i).end().toString() + " - " + i);
-                    }
-                    System.out.println("Ne rien faire - " + endList.size());
-                    String choixString = obj.readLine();
-                    while (!isNumeric(choixString) || Integer.parseInt(choixString) < 0
-                            || Integer.parseInt(choixString) > endList.size()) {
-                        System.out.print("Choix non valide, veuillez redonner votre choix :");
-                        choixString = obj.readLine();
-                        System.out.println("");
-                    }
-                    int choixInt = Integer.parseInt(choixString);
-                    if (choixInt < endList.size()) {
-                        move(endList.get(choixInt), false);
-                    }
+                if (Boolean.TRUE.equals(correct.get())) {
+                    start = end;
+                    List<Move> endList = isPossibleMoved(start.get());
+                    if (!endList.isEmpty()) {
+                        System.out.println("Voici les mouvements encore possibles :");
+                        for (int i = 0; i < endList.size(); i++) {
+                            System.out.println(endList.get(i).end().toString() + " - " + i);
+                        }
+                        System.out.println("Ne rien faire - " + endList.size());
+                        String choixString = obj.readLine();
+                        while (!isNumeric(choixString) || Integer.parseInt(choixString) < 0
+                                || Integer.parseInt(choixString) > endList.size()) {
+                            System.out.print("Choix non valide, veuillez redonner votre choix :");
+                            choixString = obj.readLine();
+                            System.out.println("");
+                        }
+                        int choixInt = Integer.parseInt(choixString);
+                        if (choixInt < endList.size()) {
+                            move(endList.get(choixInt), false);
+                        }
 
+                    }
                 }
 
                 // changer le joueur dont c’est le tour
@@ -240,11 +249,11 @@ public class Board {
         return false;
     }
 
-    private Optional<Position> syntaxCorrect(String pos) {
+    public static Optional<Position> syntaxCorrect(String pos) {
         List<String> listLettres = List.of("A", "B", "C", "D", "E", "F", "G", "H", "I", "J");
-        pos.toUpperCase();
-        if (pos.length() == 2 && listLettres.contains(pos.substring(0)) &&
-                this.isNumeric(pos.substring(1)) && Integer.parseInt(pos.substring(1)) < 10
+        pos = pos.toUpperCase();
+        if (pos.length() == 2 && listLettres.contains(pos.substring(0, 1)) &&
+                Board.isNumeric(pos.substring(1)) && Integer.parseInt(pos.substring(1)) < 10
                 && Integer.parseInt(pos.substring(1)) >= 0) {
             return Optional
                     .of(new Position(listLettres.indexOf(pos.substring(0, 1)), Integer.parseInt(pos.substring(1))));
@@ -270,15 +279,24 @@ public class Board {
      * 
      * @return If this move was successful.
      */
-    public boolean move(Move m, boolean firstMove) {
+    public Optional<Boolean> move(Move m, boolean firstMove) {
         if (firstMove ? !isPossibleUnmoved(m) : !isPossibleMoved(m.start()).isEmpty()) {
-            return false;
+            return Optional.empty();
         }
         var start = m.start();
         var end = m.end();
+        Optional<Boolean> result;
+        if (Position.distance(start, end) >= 2) {
+            result = Optional.of(true);
+            /* TODO: Eat the piece in between if we jumped. */
+            this.squares[(start.x() + end.x()) / 2][(start.y() + end.y()) / 2].setOccupied(false);
+
+        } else {
+            result = Optional.of(false);
+        }
+
         squares[end.x()][end.y()] = squares[start.x()][start.y()];
         squares[start.x()][start.y()] = new Square(true, false, false);
-        /* TODO: Eat the piece in between if we jumped. */
-        return true;
+        return result;
     }
 }

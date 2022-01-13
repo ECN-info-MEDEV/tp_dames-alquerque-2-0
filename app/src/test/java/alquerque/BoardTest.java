@@ -1,7 +1,13 @@
 package alquerque;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 
 class BoardTest {
@@ -10,6 +16,13 @@ class BoardTest {
     @Test
     void testDisplay() {
         boardTest.display();
+    }
+
+    @Test
+    void testSyntaxCorrect() {
+        assertEquals(Optional.of(new Position(6, 1)), Board.syntaxCorrect("G1"));
+        assertEquals(Optional.of(new Position(6, 1)), Board.syntaxCorrect("g1"));
+        assertNotEquals(Optional.of(new Position(6, 1)), Board.syntaxCorrect("F1"));
     }
 
     @Test
