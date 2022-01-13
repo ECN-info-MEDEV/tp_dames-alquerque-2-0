@@ -92,17 +92,18 @@ public class Board {
 
         return
         // Direct move: if we are moving to a forward diagonal which is not occupied
-        end.equals(fr) && !squareAt(fr).isOccupied() || end.equals(fl) && !squareAt(fl).isOccupied()
-        // Jump: if we are jumping to a square which is occupied, and that the square we
-        // are jumping
-        // over has an enemy's piece.
-                || end.equals(fr2) && squareAt(fr).isOccupied() && squareAt(fr).isWhite() != isWhite
+        end.equals(fr) && inRange(fr) && !squareAt(fr).isOccupied()
+                || end.equals(fl) && inRange(fl) && !squareAt(fl).isOccupied()
+                // Jump: if we are jumping to a square which is occupied, and that the square we
+                // are jumping
+                // over has an enemy's piece.
+                || end.equals(fr2) && inRange(fr2) && squareAt(fr).isOccupied() && squareAt(fr).isWhite() != isWhite
                         && !squareAt(fr2).isOccupied()
-                || end.equals(fl2) && squareAt(fl).isOccupied() && squareAt(fl).isWhite() != isWhite
+                || end.equals(fl2) && inRange(fl2) && squareAt(fl).isOccupied() && squareAt(fl).isWhite() != isWhite
                         && !squareAt(fl2).isOccupied()
-                || end.equals(br2) && squareAt(br).isOccupied() && squareAt(br).isWhite() != isWhite
+                || end.equals(br2) && inRange(br2) && squareAt(br).isOccupied() && squareAt(br).isWhite() != isWhite
                         && !squareAt(br2).isOccupied()
-                || end.equals(bl2) && squareAt(bl).isOccupied() && squareAt(bl).isWhite() != isWhite
+                || end.equals(bl2) && inRange(bl2) && squareAt(bl).isOccupied() && squareAt(bl).isWhite() != isWhite
                         && !squareAt(bl2).isOccupied();
     }
 
@@ -114,7 +115,7 @@ public class Board {
                 new Position(start.x() + 1, start.y() + 1));
         for (Position pos : positions) {
             Square theCase = this.squareAt(pos);
-            if (theCase.isOccupied() && this.currentPlayer.isWhite() != theCase.isWhite()) {
+            if (inRange(pos) && theCase.isOccupied() && this.currentPlayer.isWhite() != theCase.isWhite()) {
                 possiblePos.add(new Move(start, pos));
             }
         }
@@ -156,7 +157,14 @@ public class Board {
                 .anyMatch(this::isPossibleUnmoved);
     }
 
-    public void Turn() {
+    private boolean inRange(Position pos) {
+        if (pos.x() >= 0 && pos.x() < 10 && pos.y() >= 0 && pos.y() < 10) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean Turn() {
         this.display();
         if (this.moveExist()) {
             System.out.println("À toi de jouer joueur " + (currentPlayer.isWhite() ? "blanc" : "noir") + " !");
@@ -167,7 +175,7 @@ public class Board {
                 while (!move(new Move(start.get(), end.get()), true)) {
                     start = Optional.empty();
                     while (start.isEmpty()) {
-                        System.out.print("Rentrez la position d’arrivée : ");
+                        System.out.print("Rentrez la position de départ : ");
                         String startString = obj.readLine();
                         start = syntaxCorrect(startString);
                     }
@@ -205,6 +213,13 @@ public class Board {
 
                 }
 
+                // changer le joueur dont c’est le tour
+                if (this.currentPlayer == this.player1) {
+                    this.currentPlayer = this.player2;
+                } else {
+                    this.currentPlayer = this.player1;
+                }
+
             } catch (NumberFormatException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -212,13 +227,21 @@ public class Board {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+            return true;
+        } else {
+            String winner;
+            if (this.currentPlayer.isWhite()) {
+                winner = "Noir";
+            } else {
+                winner = "Blanc";
+            }
+            System.out.println("Fin du jeu : " + winner + " a gagner !");
         }
-
+        return false;
     }
 
     private Optional<Position> syntaxCorrect(String pos) {
-        // TODO vérifier la syntaxe
-        ArrayList<String> listLettres = (ArrayList<String>) List.of("A", "B", "C", "D", "E", "F", "G", "H", "I", "J");
+        List<String> listLettres = List.of("A", "B", "C", "D", "E", "F", "G", "H", "I", "J");
         pos.toUpperCase();
         if (pos.length() == 2 && listLettres.contains(pos.substring(0)) &&
                 this.isNumeric(pos.substring(1)) && Integer.parseInt(pos.substring(1)) < 10
@@ -226,6 +249,7 @@ public class Board {
             return Optional
                     .of(new Position(listLettres.indexOf(pos.substring(0, 1)), Integer.parseInt(pos.substring(1))));
         }
+        System.out.println("Mauvaise syntaxe");
         return Optional.empty();
     }
 

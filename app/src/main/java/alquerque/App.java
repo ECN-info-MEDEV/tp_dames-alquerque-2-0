@@ -8,15 +8,11 @@ public class App {
     public static void main(String[] args) {
 
         // create a new board
-        Board board = new Board(new Player(false), new Player(true));
+        Board board = new Board(new Player(true), new Player(false));
 
-        // set to queens for display testing
-        board.getSquares()[7][2].setQueen(true);
-        board.getSquares()[1][2].setQueen(true);
+        while (board.Turn()) {
 
-        // display the board
-        board.display();
-
+        }
     }
 
 }
