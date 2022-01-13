@@ -218,6 +218,15 @@ public class Board {
 
     private Optional<Position> syntaxCorrect(String pos) {
         // TODO vérifier la syntaxe
+        ArrayList<String> listLettres = (ArrayList<String>) List.of("A", "B", "C", "D", "E", "F", "G", "H", "I", "J");
+        pos.toUpperCase();
+        if (pos.length() == 2 && listLettres.contains(pos.substring(0)) &&
+                this.isNumeric(pos.substring(1)) && Integer.parseInt(pos.substring(1)) < 10
+                && Integer.parseInt(pos.substring(1)) >= 0) {
+            return Optional
+                    .of(new Position(listLettres.indexOf(pos.substring(0, 1)), Integer.parseInt(pos.substring(1))));
+        }
+        return Optional.empty();
     }
 
     public static boolean isNumeric(String strNum) {
