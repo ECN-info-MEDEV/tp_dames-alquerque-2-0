@@ -12,7 +12,7 @@ class AppTest {
         var white = new Player(true);
         var board = new Board(white, new Player(false));
 
-        Square whitePawn = new Square(true, true, true);
+        // Square whitePawn = new Square(true, true, true);
         Square blackPawn = new Square(true, true, false);
         Square whiteQueen = new Square(true, true, true);
         whiteQueen.setQueen(true);
