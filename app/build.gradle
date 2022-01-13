@@ -51,4 +51,12 @@ test {
 }
 jacocoTestReport {
     dependsOn test // tests are required to run before generating the report
+    additionalSourceDirs.from = files(sourceSets.main.allJava.srcDirs)
+    reports {
+        html.enabled true
+        xml.enabled true
+        csv.enabled false
+        html.destination file("app/build/reports/jacoco/html")
+    }
+    executionData.from = files('app/build/jacoco/test.exec')    
 }
