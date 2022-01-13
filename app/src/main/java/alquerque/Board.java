@@ -287,6 +287,7 @@ public class Board {
         if (Position.distance(start, end) >= 2) {
             result = Optional.of(true);
             /* TODO: Eat the piece in between if we jumped. */
+            this.squares[(start.x() + end.x()) / 2][(start.y() + end.y()) / 2].setOccupied(false);
 
         } else {
             result = Optional.of(false);
