@@ -109,14 +109,16 @@ public class Board {
 
     public List<Move> isPossibleMoved(Position start) {
         List<Move> possiblePos = new ArrayList<>();
-        List<Position> positions = List.of(new Position(start.x() - 1, start.y() - 1),
-                new Position(start.x() - 1, start.y() + 1),
-                new Position(start.x() + 1, start.y() - 1),
-                new Position(start.x() + 1, start.y() + 1));
+        List<Position> positions = List.of(new Position(start.x() - 2, start.y() - 2),
+                new Position(start.x() - 2, start.y() + 2),
+                new Position(start.x() + 2, start.y() - 2),
+                new Position(start.x() + 2, start.y() + 2));
         for (Position pos : positions) {
-            if (inRange(pos)) {
-                Square theCase = this.squareAt(pos);
-                if (theCase.isOccupied() && this.currentPlayer.isWhite() != theCase.isWhite()) {
+            if (inRange(pos)) { // on vérifie que la position est sur le plateau
+                Square end = this.squareAt(pos);
+                Square theCase = this.squares[(start.x() + pos.x()) / 2][(start.y() + pos.y()) / 2];
+                if (theCase.isOccupied() && this.currentPlayer.isWhite() != theCase.isWhite() && !end.isOccupied()) {
+                    // on vérifie que la case est occupée,
                     possiblePos.add(new Move(start, pos));
                 }
             }
