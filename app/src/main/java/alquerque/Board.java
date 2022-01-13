@@ -1,7 +1,12 @@
 package alquerque;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import alquerque.utils.Displayable;
 import lombok.Getter;
 
@@ -88,7 +93,8 @@ public class Board {
         return
         // Direct move: if we are moving to a forward diagonal which is not occupied
         end.equals(fr) && !squareAt(fr).isOccupied() || end.equals(fl) && !squareAt(fl).isOccupied()
-        // Jump: if we are jumping to a square which is occupied, and that the square we are jumping
+        // Jump: if we are jumping to a square which is occupied, and that the square we
+        // are jumping
         // over has an enemy's piece.
                 || end.equals(fr2) && squareAt(fr).isOccupied() && squareAt(fr).isWhite() != isWhite
                         && !squareAt(fr2).isOccupied()
@@ -148,6 +154,91 @@ public class Board {
 
         return List.of(fr, fl, fr2, fl2, br2, bl2).stream().map(end -> new Move(start, end))
                 .anyMatch(this::isPossibleUnmoved);
+    }
+
+    public void Turn() {
+        this.display();
+        if (this.moveExist()) {
+            System.out.println("À toi de jouer joueur " + (currentPlayer.isWhite() ? "blanc" : "noir") + " !");
+            BufferedReader obj = new BufferedReader(new InputStreamReader(System.in));
+            try {
+                Optional<Position> start = Optional.of(new Position(0, 0));
+                Optional<Position> end = Optional.of(new Position(10, 10));
+                while (!move(new Move(start.get(), end.get()), true)) {
+                    start = Optional.empty();
+                    while (start.isEmpty()) {
+                        System.out.print("Rentrez la position d’arrivée : ");
+                        String startString = obj.readLine();
+                        start = syntaxCorrect(startString);
+                    }
+                    end = Optional.empty();
+                    System.out.println("");
+                    while (end.isEmpty()) {
+                        System.out.print("Rentrez la position d’arrivée : ");
+                        String endString = obj.readLine();
+                        end = syntaxCorrect(endString);
+                    }
+                    System.out.println("");
+                }
+
+                // potentiel 2ème tour du même joueur
+
+                start = end;
+                List<Move> endList = isPossibleMoved(start.get());
+                if (!endList.isEmpty()) {
+                    System.out.println("Voici les mouvements encore possibles :");
+                    for (int i = 0; i < endList.size(); i++) {
+                        System.out.println(endList.get(i).end().toString() + " - " + i);
+                    }
+                    System.out.println("Ne rien faire - " + endList.size());
+                    String choixString = obj.readLine();
+                    while (!isNumeric(choixString) || Integer.parseInt(choixString) < 0
+                            || Integer.parseInt(choixString) > endList.size()) {
+                        System.out.print("Choix non valide, veuillez redonner votre choix :");
+                        choixString = obj.readLine();
+                        System.out.println("");
+                    }
+                    int choixInt = Integer.parseInt(choixString);
+                    if (choixInt < endList.size()) {
+                        move(endList.get(choixInt), false);
+                    }
+
+                }
+
+            } catch (NumberFormatException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    private Optional<Position> syntaxCorrect(String pos) {
+        // TODO vérifier la syntaxe
+        ArrayList<String> listLettres = (ArrayList<String>) List.of("A", "B", "C", "D", "E", "F", "G", "H", "I", "J");
+        pos.toUpperCase();
+        if (pos.length() == 2 && listLettres.contains(pos.substring(0)) &&
+                this.isNumeric(pos.substring(1)) && Integer.parseInt(pos.substring(1)) < 10
+                && Integer.parseInt(pos.substring(1)) >= 0) {
+            return Optional
+                    .of(new Position(listLettres.indexOf(pos.substring(0, 1)), Integer.parseInt(pos.substring(1))));
+        }
+        return Optional.empty();
+    }
+
+    public static boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            double d = Integer.parseInt(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
     }
 
     /**
