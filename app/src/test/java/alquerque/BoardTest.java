@@ -13,7 +13,7 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
-public class BoardTest {
+class BoardTest {
     Board boardTest = new Board(new Player(true), new Player(false));
 
     @Test

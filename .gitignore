@@ -10,6 +10,3 @@ nbproject
 
 # Ignore builds
 app/bin
-
-#ignore sonar properties file
-sonar-project.properties
