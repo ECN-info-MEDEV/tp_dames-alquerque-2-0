@@ -211,6 +211,7 @@ public class Board {
                     start = end;
                     List<Move> endList = isPossibleMoved(start.get());
                     if (!endList.isEmpty()) {
+                        this.display();
                         System.out.println("Voici les mouvements encore possibles :");
                         for (int i = 0; i < endList.size(); i++) {
                             System.out.println(endList.get(i).end().toString() + " - " + i);
